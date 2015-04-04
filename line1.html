@@ -1,0 +1,155 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>My first Three.js app</title>
+    <style>
+        body { margin: 0; }
+        canvas { width: 100%; height: 100% }
+        #stats { position: absolute; top:0; left: 0 }
+    </style>
+
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script src="js/OrbitControls.js"></script>
+
+    <script type="text/javascript">
+        'use strict';
+
+        var viewport, camera, scene, renderer, controls;
+        var cube, sphere, plane, moved_obj;
+        var light, stats;
+        var mouse = new THREE.Vector2();
+
+        window.onload = init_and_start;
+
+        function draw_line(vectors) {
+            var material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+            var geometry = new THREE.Geometry();
+            for (var i=0; i < vectors.length; i++){
+                geometry.vertices.push(vectors[i]);
+            }
+
+            var line = new THREE.Line(geometry, material);
+            scene.add(line);
+        }
+
+        function on_mouse_down(e) {
+            var raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera( mouse, camera );
+
+            console.log("mouse=", mouse);
+            console.log("camera=", camera);
+            console.log("raycaster=", raycaster);
+
+            var intersects = raycaster.intersectObject( sphere );
+
+//            draw_line([
+//                vector,
+//                new THREE.Vector3()
+//            ]);
+//            var vup = ;
+//            var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
+
+
+            console.log("intersects=", intersects);
+
+            if (intersects.length > 0){
+                moved_obj = intersects[0];
+                moved_obj.object.__dirtyPosition = true;
+                controls.enabled = false;
+                console.log("moved_obj=", moved_obj);
+            }
+        }
+
+        function on_mouse_up(e){
+            if (moved_obj) {
+                moved_obj.object.__dirtyPosition = false;
+                moved_obj = null;
+                controls.enabled = true;
+            }
+        }
+
+        function on_mouse_move( event ) {
+
+            event.preventDefault();
+
+            mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+            mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
+
+            //
+            var raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
+
+            if (moved_obj) {
+//
+                var intersects_plane = raycaster.intersectObject(plane);
+                if (intersects_plane.length > 0){
+                    moved_obj.object.position.x = intersects_plane[0].point.x;
+                    moved_obj.object.position.y = intersects_plane[0].point.y;
+                }
+//                moved_obj.position.copy(intersects[0].point.sub(offset));
+//                return;
+            }
+        }
+
+        function init_and_start(){
+            viewport = document.getElementById('viewport');
+            viewport.innerHTML = '';
+
+            // CAMERA
+            camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 200 );
+            camera.position.z = 15;
+
+            // SCENE
+            scene = new THREE.Scene();
+
+            // RENDERER
+            renderer = new THREE.WebGLRenderer( { antialias: false } );
+            renderer.setClearColor( 0xeeeeee );
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            viewport.appendChild( renderer.domElement );
+
+            //controls
+            controls = new THREE.OrbitControls( camera );
+
+//            //sphere
+            var geometry = new THREE.SphereGeometry( 1 );
+            var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+            sphere = new THREE.Mesh( geometry, material );
+            sphere.position.x =  10;
+            sphere.position.y = 10;
+            scene.add( sphere );
+
+            draw_line([
+                new THREE.Vector3(0, 10, 0),
+                new THREE.Vector3(0, 0, 0),
+                new THREE.Vector3(10, 0, 0),
+                new THREE.Vector3(0, 0, 0),
+                new THREE.Vector3(0, 0, 10)
+            ]);
+
+            renderer.domElement.addEventListener("mousedown", on_mouse_down, false);
+            renderer.domElement.addEventListener("mouseup", on_mouse_up, false);
+            renderer.domElement.addEventListener("mousemove", on_mouse_move, false);
+
+            animate();
+
+            plane = new THREE.Mesh(
+                    new THREE.PlaneBufferGeometry( 2000, 2000, 8, 8 ),
+                    new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.25, transparent: true } )
+            );
+            plane.visible = false;
+            scene.add( plane );
+        }
+
+        function animate() {
+            requestAnimationFrame( animate );
+            renderer.render(scene, camera);
+        }
+    </script>
+</head>
+<body>
+<div id="stats"></div>
+<div id="viewport">loading ...</div>
+</body>
+</html>

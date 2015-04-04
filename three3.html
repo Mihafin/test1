@@ -1,0 +1,133 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>My first Three.js app</title>
+    <style>
+        body { margin: 0; }
+        canvas { width: 100%; height: 100% }
+        #stats { position: absolute; top:0; left: 0 }
+    </style>
+
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/stats.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/OrbitControls.js"></script>
+
+    <script type="text/javascript">
+        'use strict';
+
+        var viewport, camera, scene, renderer, controls;
+        var cube;
+        var light, stats;
+
+        window.onload = init_and_start;
+
+        function init_and_start(){
+            if (!Detector.webgl){
+                Detector.addGetWebGLMessage();
+                return;
+            }
+
+            viewport = document.getElementById('viewport');
+            viewport.innerHTML = '';
+
+            // CAMERA
+            camera = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 1, 300 );
+            camera.position.z = 15;
+            camera.position.y = 7;
+            camera.lookAt(new THREE.Vector3(0,0,0));
+
+            // SCENE
+            scene = new THREE.Scene();
+//            scene.fog = new THREE.Fog( 0xeeeeee, 1, 200);
+
+            // RENDERER
+            renderer = new THREE.WebGLRenderer(  );//{ antialias: false }
+            renderer.setClearColor( 0xeeeeee );
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.shadowMapEnabled = true;
+            viewport.appendChild( renderer.domElement );
+//            renderer.gammaInput = true;
+//            renderer.gammaOutput = true;
+
+            // TEXTURES
+            var texture = THREE.ImageUtils.loadTexture( "textures/disturb.jpg" );
+//            texture.repeat.set( 3, 2 );
+//            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+//            texture.format = THREE.RGBFormat;
+
+            // MATERIALS
+            var groundMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
+            var objectMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
+
+//            // GROUND
+            var mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 256, 256, 1, 1 ), groundMaterial );
+//            var mesh = new THREE.Mesh( new THREE.BoxGeometry( 20, 1, 20 ) , groundMaterial);
+            mesh.position.y = 0;
+            mesh.rotation.x = - Math.PI / 2;
+            mesh.receiveShadow = true;
+            scene.add( mesh );
+
+            // OBJECTS
+            var geometry = new THREE.BoxGeometry( 2, 2, 2 );
+//            var material = new THREE.MeshBasicMaterial( { color: 0x222222 } );
+            cube = new THREE.Mesh( geometry, objectMaterial );
+            cube.position.y = 3;
+            cube.castShadow = true;
+            scene.add( cube );
+
+            // lights
+//            light = new THREE.AmbientLight( 0x404040 ); // soft white light
+//            scene.add( light );
+            // lights
+            scene.add(new THREE.AmbientLight( 0x666666 ));
+//            light = new THREE.DirectionalLight( 0xdfebff, 0.75 );
+            light = new THREE.SpotLight(0xdfebff, 2, 50);
+            light.shadowCameraVisible = true;
+            light.position.set( 5, 35, 5 );
+            light.castShadow = true;
+            light.shadowDarkness = 0.5;
+
+            light.shadowMapWidth = 1024;
+            light.shadowMapHeight = 1024;
+
+            light.shadowCameraNear = 1;
+            light.shadowCameraFar = 4000;
+            light.shadowCameraFov = 30;
+
+            scene.add(light);
+
+            // STATS
+            stats = new Stats();
+            document.getElementById('stats').appendChild(stats.domElement);
+            console.log("stat loaded");
+
+            //controls
+            controls = new THREE.OrbitControls( camera );
+            controls.target = new THREE.Vector3( 0, 0, 0 );
+            controls.update();
+
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame( animate );
+
+            render();
+            stats.update();
+        }
+
+        function render() {
+            cube.rotation.x += 0.005;
+            cube.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        }
+    </script>
+</head>
+<body>
+<div id="stats"></div>
+<div id="viewport">loading ...</div>
+</body>
+</html>

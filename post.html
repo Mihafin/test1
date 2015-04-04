@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="js/xmpp.js"></script>
+    <script type="text/javascript">
+        window.onload = on_load;
+
+        function on_load() {
+            console.log("on_load!");
+
+            websocket = new WebSocket(url);
+            websocket.onopen = function(evt) { onOpen(evt) };
+            websocket.onclose = function(evt) { onClose(evt) };
+            websocket.onmessage = function(evt) { onMessage(evt) };
+            websocket.onerror = function(evt) { onError(evt) };
+
+            if ("WebSocket" in window){
+                console.log("support!");
+            }
+            else{
+                console.log("NOT support!");
+            }
+        }
+
+        var url = "ws://195.88.209.185:5222/"; //http-bind
+//        var rid = Math.round(Math.random()*Math.pow(10,10));
+//  var msg = "<body rid='" + rid + "' xmlns='http://jabber.org/protocol/httpbind' to='xmpp.odnoklassniki.ru' xml:lang='ru' wait='10000' inactivity='10000' hold='1' content='text/xml; charset=utf-8' ver='1.6' xmpp:version='1.0' xmlns:xmpp='urn:xmpp:xbosh'/>";
+        var msg = '<stream:stream xmlns="jabber:client" to="ubuntu" version="1.0" xmlns:stream="http://etherx.jabber.org/streams" >';
+
+
+
+        function doSend(message) {
+            writeToScreen("SENT: " + message);
+            websocket.send(message);
+        }
+
+        function onOpen(evt) {
+            writeToScreen("CONNECTED");
+            doSend("WebSocket rocks");
+        }
+
+        function onClose(evt) {
+            writeToScreen("DISCONNECTED");
+        }
+
+        function onMessage(evt) {
+            writeToScreen('RESPONSE: ' + evt.data);
+            websocket.close();
+        }
+
+        function onError(evt) {
+            writeToScreen('ERROR: ' + evt);
+        }
+
+        function writeToScreen(m){
+            console.log("--", m);
+        }
+
+        function send(){
+            console.log("send!", msg);
+            doSend(msg);
+
+//            $.xmpp.connect({
+//                resource:"MyChat",
+//                jid:"user@domain.com",
+//                password:"qwerty",
+//                url: url, //"http://myboshservice.com/http-bind",
+//                onDisconnect:function(){
+//                    alert("Disconnected");
+//                },
+//                onConnect: function(){
+//                    $.xmpp.setPresence(null);
+//                    console.log("Connected");
+//                },
+//                onIq: function(iq){
+//                    console.log(iq);
+//                },
+//                onMessage: function(message){
+//                    console.log("New message of " + message.from + ": "+message.body);
+//                },
+//                onPresence: function(presence){
+//                    console.log("New presence of " + presence.from + " is "+presence.show);
+//                },
+//                onError: function(error){
+//                    console.log("Error: "+error);
+//                }
+//            });
+
+//            $.post(url, msg, function(data){
+//                console.log("data", data);
+//                $("#result").val(data);
+//                var response = $(xmpp.fixBody(data));
+//                xmpp.sid = response.attr("sid");
+//
+//                if(response.find("mechanism:contains('PLAIN')").length){
+//                    xmpp.loginPlain(options);
+//                }else if(response.find("mechanism:contains('DIGEST-MD5')").length){
+//                    xmpp.loginDigestMD5(options);
+//                }else{
+//                    if(xmpp.onError != null){
+//                        xmpp.onError({error:"No auth method supported", data:data});
+//                    }
+//
+//                }
+//            }, 'text');
+
+//            $.ajax({
+//                type: "GET",
+//                beforeSend: function (request)
+//                {
+//                    request.setRequestHeader("Access-Control-Allow-Origin", "*");
+//                },
+//                url: "http://xmpp.odnoklassniki.ru:5222",
+//                data: msg,
+//                processData: false,
+//                success: function(data) {
+//                    $("#results").append("The result =" + data);
+//                }
+//            });
+
+//            $.post("http://xmpp.odnoklassniki.ru:5222", msg, function (data) {
+//                //Access-Control-Allow-Credentials: true
+//                console.log("data", data);
+//                $("#result").val(data);
+//            });
+//            $.ajax({
+//                type: 'POST',
+//                url: "http://xmpp.odnoklassniki.ru:5222",
+//                data: msg,
+//                success: function(data){
+//                    //Access-Control-Allow-Credentials: true
+//                    console.log("data", data);
+//                    $("#result").val(data);
+//                },
+//                dataType: 'text',
+//                async:false,
+//                headers: {
+//                    "Access-Control-Allow-Credentials": "true",
+//                    "Access-Control-Allow-Origin": "*"
+//                }
+//            });
+// .done(function( data ) {
+////                if ( console && console.log ) {
+//                    console.log( "Sample of data:", data.slice( 0, 100 ) );
+////                }
+//            });
+
+        }
+    </script>
+</head>
+<body>
+    app_id<input id="app_id"/><br/>
+    sess_id<input id="sess_id"/><br/>
+    <input type="button" onclick="send()" value="send" /><br/>
+    <textarea id="result">res loading!</textarea>
+</body>
+</html>

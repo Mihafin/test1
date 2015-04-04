@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script type="text/javascript">
+        window.onload = init;
+
+        function init(){
+            var loader_swf = "/swf/src/sockettest.swf";
+            sq_embed_swf_object(loader_swf,
+                    "flash_container",
+                    "760",
+                    "590",
+                    "window",
+                    {}
+            );
+        }
+
+        function sq_embed_swf_object(swfUrlStr, replaceElemIdStr, widthStr, heightStr, wmode, flashvarsObj, parObj, attObj) {
+
+            console.log("Embeding object");
+            var params = parObj || {};
+            params.allowfullscreen = "true";
+            params.allowscriptaccess = "always";
+            params.allownetworking = "all";
+            params.bgcolor = params.bgcolor || "#FFFFFF";
+            params.wmode = wmode;
+
+            var attributes = attObj || {};
+            attributes.type = "application/x-shockwave-flash";
+
+            console.log("Embeding", swfUrlStr, replaceElemIdStr, widthStr, heightStr, flashvarsObj, params, attributes);
+
+            swfobject.embedSWF(swfUrlStr, replaceElemIdStr, widthStr, heightStr, "9.0.0", "expressInstall.swf", flashvarsObj, params, attributes)
+        }
+    </script>
+</head>
+<body>
+    <div id="flash_container"></div>
+</body>
+</html>

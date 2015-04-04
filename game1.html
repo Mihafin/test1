@@ -1,0 +1,56 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Fill the place!</title>
+    <style>
+        body { margin: 0; }
+        canvas { width: 100%; height: 100% }
+        #stats { position: absolute; top:0; left: 0 }
+    </style>
+
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/stats.js"></script>
+    <script src="js/Detector.js"></script>
+    <script type="text/javascript" src="js/physi.js"></script>
+    <script src="js/OrbitControls.js"></script>
+
+    <script type="text/javascript">
+        'use strict';
+
+        window.onload = init_and_start;
+
+        //vars
+        var viewport, stats;
+        var game;
+
+        Physijs.scripts.worker = '/js/physijs_worker.js';
+        Physijs.scripts.ammo = '/js/ammo.js';
+
+        function init_and_start(){
+            if (!Detector.webgl){
+                Detector.addGetWebGLMessage();
+                return;
+            }
+
+            viewport = document.getElementById('viewport');
+            stats = document.getElementById('stats');
+
+            game = new Game(viewport, stats);
+            game.init();
+
+            function animate() {
+                game.update_animation();
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+    </script>
+    <script src="js/game1/game.js"></script>
+    <!--<script src="js/game1/test.js"></script>-->
+    </head>
+<body>
+<div id="stats"></div>
+<div id="viewport"><span>loading ...</span></div>
+</body>
+</html>
