@@ -17,7 +17,7 @@ public class SocketTest extends Sprite {
 
     private function on_add(event:Event):void {
         removeEventListener(Event.ADDED_TO_STAGE, on_add);
-        trace("LOADED 6!!!");
+        trace("LOADED 7!!!");
 
         try {
             socket = new XMLSocket();
@@ -28,7 +28,7 @@ public class SocketTest extends Sprite {
             socket.addEventListener(ProgressEvent.PROGRESS, progressHandler);
             socket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
             trace("connecting..");
-            socket.connect( "195.88.209.185", 5223 );
+            socket.connect( "195.88.209.185", 5229 );
         }
         catch(e:SecurityError) {
             trace("sec err", e);
@@ -60,7 +60,7 @@ public class SocketTest extends Sprite {
     }
 
     private function connectHandler(event:Event):void {
-        trace("conected!");
+        trace("conected!", socket.toString());
     }
 
     private function handleDisconnect(event:Event):void {

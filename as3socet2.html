@@ -7,7 +7,7 @@
         window.onload = init;
 
         function init(){
-            var loader_swf = "/swf/src/sockettest.swf";
+            var loader_swf = "/swf/src/sockettest.swf?" + (new Date().valueOf());
             sq_embed_swf_object(loader_swf,
                     "flash_container",
                     "760",
