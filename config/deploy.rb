@@ -32,8 +32,28 @@ namespace :deploy do
   # end
 end
 
+task :compile_flash do
+  #compile and upload flash10 version as app.swf and don't update revision
+  # compile_and_upload_flash 'deploy','Farm', ENV['locale'], 'app', nil,  false
+  dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
+  file = 'swf/src/sockettest.swf'
+  cmd = "cd #{dir} && rm -f #{file} && /flex_sdk_4.6/bin/mxmlc -omit-trace-statements=false -output=#{file} -debug -static-link-runtime-shared-libraries=true swf/src/sockettest.as"
+  p cmd
+  system(cmd)
+
+  upload_with_style(File.join(dir, file), "#{deploy_to}/current/#{file}")
+end
+
+def upload_with_style from , to
+  # run("mkdir -p #{to[0..to.rindex('/')-1]}")
+  upload(from, to+".new")
+  run("mv -f #{to}.new #{to}")
+end
+
+
 # task :add_ssh_key do
 #   run "if [ -f /projects/unfuddle_rsa ]; then ssh-add /projects/unfuddle_rsa; fi"
 # end
 
 # before "deploy", "add_ssh_key"
+after "deploy", "compile_flash"
