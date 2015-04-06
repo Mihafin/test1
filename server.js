@@ -15,6 +15,7 @@ var mimeTypes = {
     "png": "image/png",
     "js": "text/javascript",
     "css": "text/css",
+    "xml": "application/xhtml+xml", //"text/xml",
     "swf": "application/x-shockwave-flash"};
 
 function onRequest(request, response) {
