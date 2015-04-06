@@ -1,7 +1,7 @@
 // /Users/mihail/node_js/bin/npm install // errors
 // /Users/mihail/node_js/bin/node /Users/mihail/projs/three1/server.js
 
-var port = 8080;
+var port = 80;
 
 var http = require("http");
 var url = require("url");
@@ -23,7 +23,7 @@ function onRequest(request, response) {
     var filename = path.join(process.cwd(), pathname);
     var ext = path.extname(filename).split(".")[1];
 
-    console.log("Request for " + filename + " received.");
+    console.log("Request for " + filename + " received." + mimeTypes);
 
     if (ext && mimeTypes[ext]){
         fs.exists(filename, function(exists) {
