@@ -28,7 +28,7 @@ public class SocketTest extends Sprite {
             socket.addEventListener(ProgressEvent.PROGRESS, progressHandler);
             socket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
             trace("connecting..");
-            socket.connect( "195.88.209.185", 5222 );
+            socket.connect( "195.88.209.185", 5223 );
         }
         catch(e:SecurityError) {
             trace("sec err", e);
