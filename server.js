@@ -73,4 +73,4 @@ function process_request(pathname, filename, request, response) {
 
 http.createServer(onRequest).listen(port);
 
-console.log("Server has started on", port, "!");
+console.log("Server has started on", port, "!", process.cwd());
