@@ -17,7 +17,7 @@ public class SocketTest extends Sprite {
 
     private function on_add(event:Event):void {
         removeEventListener(Event.ADDED_TO_STAGE, on_add);
-        trace("LOADED 7!!!");
+        trace("LOADED 8!!!");
 
         try {
             socket = new XMLSocket();

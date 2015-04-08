@@ -1,7 +1,7 @@
 // /Users/mihail/node_js/bin/npm install // errors
 // /Users/mihail/node_js/bin/node /Users/mihail/projs/three1/server.js
 
-var port = 80;
+var port = process.env.PORT;
 
 var http = require("http");
 var url = require("url");
@@ -15,7 +15,7 @@ var mimeTypes = {
     "png": "image/png",
     "js": "text/javascript",
     "css": "text/css",
-    "xml": "application/xhtml+xml", //"text/xml",
+    "xml": "application/xml", //"text/xml",
     "swf": "application/x-shockwave-flash"};
 
 function onRequest(request, response) {
