@@ -1,5 +1,5 @@
 Eye.config do
-  logger '~/tmp/eye.log'
+  logger '/projects/cap/test1/current/log/eye.log'
 end
 
 Eye.application 'test' do
