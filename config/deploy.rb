@@ -51,11 +51,10 @@ def upload_with_style from , to
 end
 
 task :restart_eye do
-  run("eye l /projects/cap/test1/current/config/eye_cfg.rb")
-  sleep 1
-  run("eye stop test")
-  sleep 1
-  run("eye start test")
+  run("sudo -iu mihail eye stop test")
+  run("sudo -iu mihail eye quit")
+  run("sudo -iu mihail eye load /projects/cap/test1/current/config/eye_cfg.rb")
+  run("sudo -iu mihail eye start test")
 end
 
 # task :add_ssh_key do
@@ -63,5 +62,5 @@ end
 # end
 
 # before "deploy", "add_ssh_key"
-after "deploy", "deploy:restart_eye"
+after "deploy", "restart_eye"
 after "deploy", "compile_flash"

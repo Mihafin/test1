@@ -16,7 +16,7 @@ public class SocketTest extends Sprite {
 
     private function on_add(event:Event):void {
         removeEventListener(Event.ADDED_TO_STAGE, on_add);
-        trace("LOADED 12!!!");
+        trace("LOADED 13!!!");
 
         Security.loadPolicyFile(policy);
 
