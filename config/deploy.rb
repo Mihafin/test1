@@ -50,10 +50,18 @@ def upload_with_style from , to
   run("mv -f #{to}.new #{to}")
 end
 
+task :restart_eye do
+  run("eye l /projects/cap/test1/current/config/eye_cfg.rb")
+  sleep 1
+  run("eye stop test")
+  sleep 1
+  run("eye start test")
+end
 
 # task :add_ssh_key do
 #   run "if [ -f /projects/unfuddle_rsa ]; then ssh-add /projects/unfuddle_rsa; fi"
 # end
 
 # before "deploy", "add_ssh_key"
+after "deploy", "deploy:restart_eye"
 after "deploy", "compile_flash"
